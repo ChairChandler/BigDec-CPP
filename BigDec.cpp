@@ -197,14 +197,17 @@ std::istream& operator>>(std::istream &os, BigDec &number)
 	std::string pom;
 	size_t len;
 	os>>pom;
-	len=pom.size();
-	number.delValue();
-	number.value=new char[len+1];
-	number.strMalloc=0;
-	
-	for(int i=0;i<len;i++)
-	number.value[i]=pom[i];
-	number.value[len]='\0';
+	if(number.checkValue(pom)==true)
+	{
+		len=pom.size();
+		number.delValue();
+		number.value=new char[len+1];
+		number.strMalloc=0;
+		
+		for(int i=0;i<len;i++)
+		number.value[i]=pom[i];
+		number.value[len]='\0';
+	}
 	
 	return os;
 }
