@@ -1,7 +1,8 @@
 #include "BigDec.h"
 #include <cstdlib>
 #include <iostream>
-#include "BigDec"
+#include <string>
+#include "BigDec.hpp"
 		
 BigDec::BigDec()
 {
@@ -69,20 +70,33 @@ BigDec::BigDec(BigDec &number)
 	strncpy(this->value,number.value,nb_len+1);
 }
 
+void BigDec::copy(BigDec *ptr, BigDec &obj)
+{
+	size_t len;
+	
+	len=strlen(obj.value);
+	ptr->delValue();
+	ptr->strMalloc=obj.strMalloc;
+	ptr->value=new char[len+1];
+	strncpy(ptr->value,obj.value,len+1);
+}
+
 BigDec& BigDec::operator+(BigDec &number)
 {
-	BigDec ptr(BigDec_add(this->value,number.value));
-	ptr.strMalloc=1;
-	return ptr;
+	BigDec pom(BigDec_add(this->value,number.value));
+	BigDec *ptr=new BigDec;
+	copy(ptr,number);
+	return *ptr;
 }
 
 BigDec& BigDec::operator+(C_BigDec number)
 {
 	if(checkValue(number)==true)
 	{
-	BigDec ptr(BigDec_add(this->value,number));
-	ptr.strMalloc=1;
-	return ptr;
+	BigDec pom(BigDec_add(this->value,number));
+	BigDec *ptr=new BigDec;
+	copy(ptr,pom);
+	return *ptr;
 	}
 	else
 	return *this;
@@ -92,9 +106,10 @@ BigDec& operator+(C_BigDec number1, BigDec &number2)
 {
 	if(number2.checkValue(number1)==true)
 	{
-		BigDec ptr(BigDec_add(number1,number2.value));
-		ptr.strMalloc=1;
-		return ptr;
+		BigDec pom(BigDec_add(number1,number2.value));
+		BigDec *ptr=new BigDec;
+		number2.copy(ptr,pom);
+		return *ptr;
 	}
 	else
 		return number2;
@@ -177,6 +192,23 @@ std::ostream& operator<<(std::ostream &os, BigDec &number)
 	return os;
 }
 
+std::istream& operator>>(std::istream &os, BigDec &number)
+{
+	std::string pom;
+	size_t len;
+	os>>pom;
+	len=pom.size();
+	number.delValue();
+	number.value=new char[len+1];
+	number.strMalloc=0;
+	
+	for(int i=0;i<len;i++)
+	number.value[i]=pom[i];
+	number.value[len]='\0';
+	
+	return os;
+}
+
 void BigDec::delValue()
 {
 	if(this->strMalloc)
@@ -187,18 +219,20 @@ void BigDec::delValue()
 
 BigDec& BigDec::operator-(BigDec &number)
 {
-	BigDec ptr(BigDec_sub(this->value,number.value));
-	ptr.strMalloc=1;
-	return ptr;
+	BigDec pom(BigDec_sub(this->value,number.value));
+	BigDec *ptr=new BigDec;
+	copy(ptr,pom);
+	return *ptr;
 }
 
 BigDec& operator-(C_BigDec number1, BigDec &number2)
 {
 	if(number2.checkValue(number1)==true)
 	{
-		BigDec ptr(BigDec_sub(number1,number2.value));
-		ptr.strMalloc=1;
-		return ptr;
+		BigDec pom(BigDec_sub(number1,number2.value));
+		BigDec *ptr=new BigDec;
+		number2.copy(ptr,pom);
+		return *ptr;
 	}
 	else
 		return number2;
@@ -208,9 +242,10 @@ BigDec& BigDec::operator-(C_BigDec number)
 {
 	if(checkValue(number)==true)
 	{
-		BigDec ptr(BigDec_sub(this->value,number));
-		ptr.strMalloc=1;
-		return ptr;
+		BigDec pom(BigDec_sub(this->value,number));
+		BigDec *ptr=new BigDec;
+		copy(ptr,pom);
+		return *ptr;
 	}
 	else
 		return *this;
@@ -241,18 +276,20 @@ void BigDec::operator-=(C_BigDec number)
 
 BigDec& BigDec::operator*(BigDec &number)
 {
-	BigDec ptr(BigDec_mul(this->value,number.value));
-	ptr.strMalloc=1;
-	return ptr;
+	BigDec pom(BigDec_mul(this->value,number.value));
+	BigDec *ptr=new BigDec;
+	copy(ptr,pom);
+	return *ptr;
 }
 
 BigDec& BigDec::operator*(C_BigDec number)
 {
 	if(checkValue(number)==true)
 	{
-		BigDec ptr(BigDec_mul(this->value,number));
-		ptr.strMalloc=1;
-		return ptr;	
+		BigDec pom(BigDec_mul(this->value,number));
+		BigDec *ptr=new BigDec;
+		copy(ptr,pom);
+		return *ptr;
 	}
 	else
 		return *this;
@@ -262,9 +299,10 @@ BigDec& operator*(C_BigDec number1, BigDec &number2)
 {
 	if(number2.checkValue(number1)==true)
 	{
-		BigDec ptr(BigDec_mul(number1,number2.value));
-		ptr.strMalloc=1;
-		return ptr;
+		BigDec pom(BigDec_mul(number1,number2.value));
+		BigDec *ptr=new BigDec;
+		number2.copy(ptr,pom);
+		return *ptr;
 	}
 	else
 		return number2;
@@ -293,18 +331,20 @@ void BigDec::operator*=(C_BigDec number)
 
 BigDec& BigDec::operator/(BigDec &number)
 {
-	BigDec ptr(BigDec_div(this->value,number.value));
-	ptr.strMalloc=1;
-	return ptr;
+	BigDec pom(BigDec_div(this->value,number.value));
+	BigDec *ptr=new BigDec;
+	copy(ptr,pom);
+	return *ptr;
 }
 
 BigDec& BigDec::operator/(C_BigDec number)
 {
 	if(checkValue(number)==true)
 	{
-		BigDec ptr(BigDec_div(this->value,number));
-		ptr.strMalloc=1;
-		return ptr;
+		BigDec pom(BigDec_div(this->value,number));
+		BigDec *ptr=new BigDec;
+		copy(ptr,pom);
+		return *ptr;
 	}
 	else
 		return *this;
@@ -314,9 +354,10 @@ BigDec& operator/(C_BigDec number1, BigDec &number2)
 {
 	if(number2.checkValue(number1)==true)
 	{
-		BigDec ptr(BigDec_div(number1,number2.value));
-		ptr.strMalloc=1;
-		return ptr;
+		BigDec pom(BigDec_div(number1,number2.value));
+		BigDec *ptr=new BigDec;
+		number2.copy(ptr,pom);
+		return *ptr;
 	}
 	else
 		return number2;
@@ -345,9 +386,10 @@ void BigDec::operator/=(C_BigDec number)
 
 BigDec& BigDec::operator^(unsigned long long exp)
 {
-	BigDec ptr(BigDec_pow(this->value,exp));
-	ptr.strMalloc=1;
-	return ptr;
+	BigDec pom(BigDec_pow(this->value,exp));
+	BigDec *ptr=new BigDec;
+	copy(ptr,pom);
+	return *ptr;
 }
 	
 void BigDec::operator^=(unsigned long long exp)
@@ -361,18 +403,20 @@ void BigDec::operator^=(unsigned long long exp)
 
 BigDec& BigDec::operator%(BigDec &number)
 {
-	BigDec ptr(BigDec_mod(this->value,number.value));
-	ptr.strMalloc=1;
-	return ptr;
+	BigDec pom(BigDec_mod(this->value,number.value));
+	BigDec *ptr=new BigDec;
+	copy(ptr,pom);
+	return *ptr;
 }
 
 BigDec& BigDec::operator%(C_BigDec number)
 {
 	if(checkValue(number)==true)
 	{
-		BigDec ptr(BigDec_mod(this->value,number));
-		ptr.strMalloc=1;
-		return ptr;	
+		BigDec pom(BigDec_mod(this->value,number));
+		BigDec *ptr=new BigDec;
+		copy(ptr,pom);
+		return *ptr;
 	}
 	else
 		return *this;
@@ -382,10 +426,10 @@ BigDec& operator%(C_BigDec number1, BigDec &number2)
 {
 	if(number2.checkValue(number1)==true)
 	{
-		BigDec ptr;
-		ptr.strMalloc=1;
-		ptr.value=BigDec_mod(number1,number2.value);
-		return ptr;
+		BigDec pom(BigDec_mod(number1,number2.value));
+		BigDec *ptr=new BigDec;
+		number2.copy(ptr,pom);
+		return *ptr;
 	}
 	else
 		return number2;
@@ -645,9 +689,10 @@ bool operator<=(C_BigDec number1, BigDec &number2)
 
 BigDec& BigDec::gcd(BigDec &number)
 {
-	BigDec ptr(BigDec_gcd(this->value,number.value));
-	ptr.strMalloc=1;
-	return ptr;
+	BigDec pom(BigDec_gcd(this->value,number.value));	
+	BigDec *ptr=new BigDec;
+	copy(ptr,pom);
+	return *ptr;
 }
 
 BigDec& BigDec::gcd(C_BigDec number)
@@ -655,16 +700,18 @@ BigDec& BigDec::gcd(C_BigDec number)
 	if(checkValue(number)==false)
 		return *this;
 	
-	BigDec ptr(BigDec_gcd(this->value,number));
-	ptr.strMalloc=1;
-	return ptr;
+	BigDec pom(BigDec_gcd(this->value,number));
+	BigDec *ptr=new BigDec;
+	copy(ptr,pom);
+	return *ptr;
 }
 
 BigDec& BigDec::fgcd(BigDec &number)
 {
-	BigDec ptr(BigDec_fgcd(this->value,number.value));
-	ptr.strMalloc=1;
-	return ptr;
+	BigDec pom(BigDec_fgcd(this->value,number.value));
+	BigDec *ptr=new BigDec;
+	copy(ptr,pom);
+	return *ptr;
 }
 
 BigDec& BigDec::fgcd(C_BigDec number)
@@ -672,18 +719,20 @@ BigDec& BigDec::fgcd(C_BigDec number)
 	if(checkValue(number)==false)
 		return *this;
 	
-	BigDec ptr(BigDec_fgcd(this->value,number));
-	ptr.strMalloc=1;
-	return ptr;
+	BigDec pom(BigDec_fgcd(this->value,number));
+	BigDec *ptr=new BigDec;
+	copy(ptr,pom);
+	return *ptr;
 }
 
 BigDec& BigDec::genrfn()
 {
 	if(this->operator>("1") == true)
 	{
-		BigDec ptr(BigDec_genrfn(this->value));
-		ptr.strMalloc=1;
-		return ptr;
+		BigDec pom(BigDec_genrfn(this->value));
+		BigDec *ptr=new BigDec;
+		copy(ptr,pom);
+		return *ptr;
 	}
 	else
 	{
@@ -694,9 +743,10 @@ BigDec& BigDec::genrfn()
 
 BigDec& BigDec::modularPower(BigDec &exp, BigDec &mod)
 {
-	BigDec ptr(BigDec_modularPower(this->value,exp.value,mod.value));
-	ptr.strMalloc=1;
-	return ptr;
+	BigDec pom(BigDec_modularPower(this->value,exp.value,mod.value));
+	BigDec *ptr=new BigDec;
+	copy(ptr,pom);
+	return *ptr;
 }
 
 BigDec& BigDec::modularPower(BigDec &exp, C_BigDec mod)
@@ -704,9 +754,10 @@ BigDec& BigDec::modularPower(BigDec &exp, C_BigDec mod)
 	if(checkValue(mod)==false)
 		return *this;
 	
-	BigDec ptr(BigDec_modularPower(this->value,exp.value,mod));
-	ptr.strMalloc=1;
-	return ptr;
+	BigDec pom(BigDec_modularPower(this->value,exp.value,mod));
+	BigDec *ptr=new BigDec;
+	copy(ptr,pom);
+	return *ptr;
 }
 
 BigDec& BigDec::modularPower(C_BigDec exp, BigDec &mod)
@@ -714,9 +765,10 @@ BigDec& BigDec::modularPower(C_BigDec exp, BigDec &mod)
 	if(checkValue(exp)==false)
 		return *this;
 	
-	BigDec ptr(BigDec_modularPower(this->value,exp,mod.value));
-	ptr.strMalloc=1;
-	return ptr;
+	BigDec pom(BigDec_modularPower(this->value,exp,mod.value));
+	BigDec *ptr=new BigDec;
+	copy(ptr,pom);
+	return *ptr;
 }
 
 BigDec& BigDec::modularPower(C_BigDec exp, C_BigDec mod)
@@ -724,9 +776,10 @@ BigDec& BigDec::modularPower(C_BigDec exp, C_BigDec mod)
 	if(checkValue(exp)==false||checkValue(mod)==false)
 		return *this;
 	
-	BigDec ptr(BigDec_modularPower(this->value,exp,mod));
-	ptr.strMalloc=1;
-	return ptr;
+	BigDec pom(BigDec_modularPower(this->value,exp,mod));
+	BigDec *ptr=new BigDec;
+	copy(ptr,pom);
+	return *ptr;
 }
 
 bool BigDec::checkValue(C_BigDec number)

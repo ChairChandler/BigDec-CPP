@@ -8,6 +8,7 @@ class BigDec
 {	
 	private:
 		void delValue();
+		void copy(BigDec *ptr, BigDec &obj);
 		bool checkValue(C_BigDec number);
 		bool checkValue(std::string number);
 		char strMalloc;
@@ -33,6 +34,7 @@ class BigDec
 		friend BigDec& operator+(C_BigDec number1, BigDec &number2);
 		
 		friend std::ostream& operator<<(std::ostream &os, BigDec &number);
+		friend std::istream& operator>>(std::istream &os, BigDec &number);
 		
 		BigDec& operator-(BigDec &number);
 		BigDec& operator-(C_BigDec number);
