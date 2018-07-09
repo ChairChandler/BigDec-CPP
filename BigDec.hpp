@@ -34,7 +34,7 @@ class BigDec
 		friend BigDec& operator+(C_BigDec number1, BigDec &number2);
 		
 		friend std::ostream& operator<<(std::ostream &os, BigDec &number);
-		friend std::istream& operator>>(std::istream &os, BigDec &number);
+		friend std::istream& operator>>(std::istream &is, BigDec &number);
 		
 		BigDec& operator-(BigDec &number);
 		BigDec& operator-(C_BigDec number);

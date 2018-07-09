@@ -192,11 +192,11 @@ std::ostream& operator<<(std::ostream &os, BigDec &number)
 	return os;
 }
 
-std::istream& operator>>(std::istream &os, BigDec &number)
+std::istream& operator>>(std::istream &is, BigDec &number)
 {
 	std::string pom;
 	size_t len;
-	os>>pom;
+	is>>pom;
 	if(number.checkValue(pom)==true)
 	{
 		len=pom.size();
@@ -209,7 +209,7 @@ std::istream& operator>>(std::istream &os, BigDec &number)
 		number.value[len]='\0';
 	}
 	
-	return os;
+	return is;
 }
 
 void BigDec::delValue()
