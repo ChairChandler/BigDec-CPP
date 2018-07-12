@@ -812,3 +812,9 @@ bool BigDec::checkValue(std::string number)
 	
 	return true;
 }
+
+template <class T>
+BigDec::operator T*()
+{
+	return static_cast<T*>(value);
+}

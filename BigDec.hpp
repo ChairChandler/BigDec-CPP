@@ -104,6 +104,9 @@ class BigDec
 		BigDec& modularPower(BigDec &exp, C_BigDec mod);
 		BigDec& modularPower(C_BigDec exp, BigDec &mod);
 		BigDec& modularPower(C_BigDec exp, C_BigDec mod);
+		
+		template <class T>
+		operator T*();
 };
 
 #endif
